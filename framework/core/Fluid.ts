@@ -1,0 +1,1 @@
+interface Fluid<T extends Interpolatable<T> & Extrapolatable<T>> extends Interpolatable<T>, Extrapolatable<T> { }
