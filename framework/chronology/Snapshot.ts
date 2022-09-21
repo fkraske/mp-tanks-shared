@@ -1,6 +1,6 @@
-class Snapshot<T extends Fluid<T>> extends TimeStampedValue<T> implements Fluid<Snapshot<T>> {
+class Snapshot<T extends Morphable<T>> extends TimeStampedValue<T> implements Morphable<Snapshot<T>> {
   public interpolate(other: Snapshot<T>, t: number): Snapshot<T> {
-    return new Snapshot((1 - t) * this.timeStamp + t * other.timeStamp, this.value.interpolate(other.value, t))
+    return new Snapshot(this.timeStamp.interpolate(other.timeStamp, t), this.value.interpolate(other.value, t))
   }
 
   public extrapolate(t: number): Snapshot<T> {

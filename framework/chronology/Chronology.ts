@@ -1,6 +1,6 @@
 
 
-class Chronology<T extends Fluid<T>> {
+class Chronology<T extends Morphable<T>> {
   constructor(private root: Snapshot<T>, private length: number) { }
 
   private leaps: Array<TimeStampedValue<Leap<T>>> = []
