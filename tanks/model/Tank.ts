@@ -1,4 +1,8 @@
-class Tank implements Morphable<Tank> {
+import { Vector2 } from "../../framework/math/Vector2"
+import { Morphable } from "../../framework/morphable/Morphable"
+import * as Angles from "../../framework/math/Angles"
+
+export class Tank implements Morphable<Tank> {
   public constructor(
     public readonly position: Vector2,
     public readonly velocity: Vector2,
@@ -15,7 +19,7 @@ class Tank implements Morphable<Tank> {
     )
   }
 
-  public extrapolate(t: number): Tank {
+  public advance(t: number): Tank {
     return new Tank(
       this.position.addV(this.velocity.mul(t)),
       this.velocity,

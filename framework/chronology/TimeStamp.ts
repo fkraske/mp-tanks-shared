@@ -1,1 +1,1 @@
-type TimeStamp = DOMHighResTimeStamp
+export type TimeStamp = DOMHighResTimeStamp

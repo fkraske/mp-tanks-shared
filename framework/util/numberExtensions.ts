@@ -1,5 +1,9 @@
-interface Number extends Interpolatable<number> { }
+import { Interpolatable } from "../morphable/Interpolatable"
 
-Number.prototype.interpolate = function(other: number, t: number) {
+declare global {
+  export interface Number extends Interpolatable<number> { }
+}
+
+Number.prototype.interpolate = function (other: number, t: number) {
   return (1 - t) * Number(this) + t * other
 }

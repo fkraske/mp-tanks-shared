@@ -1,6 +1,10 @@
+import { Morphable } from "../morphable/Morphable";
+import { Leap } from "./Leap";
+import { Snapshot } from "./Snapshot";
+import { TimeStamp } from "./TimeStamp";
+import { TimeStampedValue } from "./TimeStampedValue";
 
-
-class Chronology<T extends Morphable<T>> {
+export class History<T extends Morphable<T>> {
   constructor(private root: Snapshot<T>, private length: number) { }
 
   private leaps: Array<TimeStampedValue<Leap<T>>> = []
@@ -11,12 +15,12 @@ class Chronology<T extends Morphable<T>> {
     for (const l of this.leaps) {
       if (l.timeStamp > timeStamp)
         break
-      
-      result = l.value.apply(result.extrapolate(l.timeStamp - result.timeStamp))
+
+      result = l.value.apply(result.advance(l.timeStamp - result.timeStamp))
     }
 
     return timeStamp > result.timeStamp
-      ? result.extrapolate(timeStamp - result.timeStamp)
+      ? result.advance(timeStamp - result.timeStamp)
       : result;
   }
 

@@ -1,9 +1,11 @@
-class Vector2 implements Interpolatable<Vector2> {
+import { Interpolatable } from "../morphable/Interpolatable"
+
+export class Vector2 implements Interpolatable<Vector2> {
   public constructor(
     public readonly x: number,
     public readonly y: number
   ) { }
-  
+
   public add(scalar: number) {
     return new Vector2(
       this.x + scalar,
@@ -31,7 +33,7 @@ class Vector2 implements Interpolatable<Vector2> {
       this.y / scalar
     )
   }
-  
+
   public addV(other: Vector2) {
     return new Vector2(
       this.x + other.x,
@@ -65,6 +67,9 @@ class Vector2 implements Interpolatable<Vector2> {
   }
 
   public interpolate(other: Vector2, t: number): Vector2 {
-    return new Vector2(this.x.interpolate(other.x, t), this.y.interpolate(other.y, t))
+    return new Vector2(
+      this.x.interpolate(other.x, t),
+      this.y.interpolate(other.y, t)
+    )
   }
 }

@@ -1,4 +1,7 @@
-class Player implements Morphable<Player> {
+import { Morphable } from "../../framework/morphable/Morphable"
+import { Tank } from "./Tank"
+
+export class Player implements Morphable<Player> {
   public constructor(
     public readonly lives: number,
     public readonly tank: Tank
@@ -11,10 +14,10 @@ class Player implements Morphable<Player> {
     )
   }
 
-  public extrapolate(t: number): Player {
+  public advance(t: number): Player {
     return new Player(
       this.lives,
-      this.tank.extrapolate(t)
+      this.tank.advance(t)
     )
   }
 }
