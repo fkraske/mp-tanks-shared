@@ -1,6 +1,9 @@
 import { Interpolatable } from "../morphable/Interpolatable"
 
 export class Vector2 implements Interpolatable<Vector2> {
+  public static readonly Zero = new Vector2(0, 0)
+  public static readonly One = new Vector2(1, 1)
+  
   public constructor(
     public readonly x: number,
     public readonly y: number

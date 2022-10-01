@@ -1,5 +1,5 @@
 import { TimeStamp } from "./TimeStamp";
 
-export class TimeStampedValue<T> {
+export class TimeStamped<T> {
   constructor(public readonly timeStamp: TimeStamp, public readonly value: T) { }
 }
