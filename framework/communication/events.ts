@@ -1,8 +1,10 @@
 export namespace IOEvents {
-  export const CONNECTION = 'connection'
-  export const DISCONNECT = 'disconnect'
-}
+  export namespace Builtin {
+    export const CONNECTION = 'connection'
+    export const DISCONNECT = 'disconnect'
+  }
 
-export namespace Events {
-  export const MESSAGE = 'message'
+  export namespace Custom {
+    export const MESSAGE = 'message'
+  }
 }

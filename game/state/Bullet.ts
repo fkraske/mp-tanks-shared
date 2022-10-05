@@ -8,18 +8,18 @@ export class Bullet implements Morphable<Bullet> {
     public readonly velocity: Vector2
   ) { }
 
-  public interpolate(other: Bullet, t: number): Bullet {
-    if (this.owner != other.owner)
+  public interpolate(that: Bullet, t: number) {
+    if (this.owner != that.owner)
       console.warn("Incompatible bullet owners during interpolation")
 
     return new Bullet(
-      other.owner,
-      this.position.interpolate(other.position, t),
-      this.velocity.interpolate(other.velocity, t)
+      that.owner,
+      this.position.interpolate(that.position, t),
+      this.velocity.interpolate(that.velocity, t)
     );
   }
 
-  public advance(t: number): Bullet {
+  public advance(t: number) {
     return new Bullet(
       this.owner,
       this.position.addV(this.velocity.mul(t)),

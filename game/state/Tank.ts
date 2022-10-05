@@ -10,16 +10,16 @@ export class Tank implements Morphable<Tank> {
     public readonly angularVelocity: number = 0,
   ) { }
 
-  public interpolate(other: Tank, t: number): Tank {
+  public interpolate(that: Tank, t: number) {
     return new Tank(
-      this.position.interpolate(other.position, t),
-      Angles.interpolate(this.angle, other.angle, t),
-      this.velocity.interpolate(other.velocity, t),
-      this.angularVelocity.interpolate(other.angularVelocity, t)
+      this.position.interpolate(that.position, t),
+      Angles.interpolate(this.angle, that.angle, t),
+      this.velocity.interpolate(that.velocity, t),
+      this.angularVelocity.interpolate(that.angularVelocity, t)
     )
   }
 
-  public advance(t: number): Tank {
+  public advance(t: number) {
     return new Tank(
       this.position.addV(this.velocity.mul(t)),
       Angles.normalize(this.angle + this.angularVelocity * t),

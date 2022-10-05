@@ -7,14 +7,14 @@ import { TimeStamped } from "./TimeStamped";
 export class Chronology<T extends Morphable<T>> {
   constructor(private root: Snapshot<T>, private length: number) { }
 
-  public get(timeStamp: TimeStamp): Snapshot<T> {
+  public get(timeStamp: TimeStamp) {
     let result = this.root;
 
-    for (const l of this.discontinuities) {
+    for (const l of this.leaps) {
       if (l.timeStamp > timeStamp)
         break
 
-      result = l.value.apply(result.advance(l.timeStamp - result.timeStamp))
+      result = result.advance(l.timeStamp - result.timeStamp).leap(l.value)
     }
 
     return timeStamp > result.timeStamp
@@ -23,14 +23,14 @@ export class Chronology<T extends Morphable<T>> {
   }
 
   public addLeap(timeStamp: TimeStamp, leap: Leap<T>) {
-    this.addDiscontinuity(new TimeStamped<Leap<T>>(timeStamp, leap))
+    this.addTimeStampedLeap(new TimeStamped<Leap<T>>(timeStamp, leap))
   }
 
-  public addDiscontinuity(discontinuity: TimeStamped<Leap<T>>) {
-    this.discontinuities.splice(
-      this.discontinuities.findIndex((l) => l.timeStamp > discontinuity.timeStamp),
+  public addTimeStampedLeap(leap: TimeStamped<Leap<T>>) {
+    this.leaps.splice(
+      this.leaps.findIndex((l) => l.timeStamp > leap.timeStamp),
       0,
-      discontinuity
+      leap
     )
   }
 
@@ -41,11 +41,11 @@ export class Chronology<T extends Morphable<T>> {
     }
 
     const newRoot = this.get(newRootTimeStamp)
-    this.discontinuities = this.discontinuities.filter((l) => l.timeStamp >= newRootTimeStamp)
+    this.leaps = this.leaps.filter((l) => l.timeStamp >= newRootTimeStamp)
     this.root = newRoot
   }
 
 
   
-  private discontinuities: Array<TimeStamped<Leap<T>>> = []
+  private leaps: Array<TimeStamped<Leap<T>>> = []
 }

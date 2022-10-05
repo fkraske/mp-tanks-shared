@@ -1,10 +1,12 @@
+import { TimeStamp } from "shared/framework/chronology/TimeStamp";
 import { InputMessage } from "../../framework/communication/messages";
-import { ButtonState } from "../model/ButtonState";
-import { Direction } from "../model/Direction";
+import { ButtonState } from "../state/ButtonState";
+import { Direction } from "../state/Direction";
 
 export abstract class MoveInputMessage extends InputMessage {
   public constructor(
+    timeStamp: TimeStamp,
     public readonly direction: Direction,
     public readonly state: ButtonState
-  ) { super() }
+  ) { super(timeStamp) }
 }

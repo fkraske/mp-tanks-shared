@@ -2,30 +2,44 @@ import { Morphable } from "./Morphable"
 
 //TODO id recycling
 export class MorphableContainer<T extends Morphable<T>> implements Morphable<MorphableContainer<T>>, Iterable<T> {
+  public constructor(original?: MorphableContainer<T>) {
+    if (!original)
+      return
+    
+    this._ids = new Set(original._ids)
+    this._objects = new Map(original._objects)
+  }
+  
   public get(id: number) {
     return this._objects.get(id)
   }
 
-  public add(object: T): number {
-    let id = ++this._maxId
-    this._ids.add(this._maxId)
-    this._objects.set(this._maxId, object)
+  public insert(id: number, object: T) {
+    let result = new MorphableContainer<T>(this)
+    result._ids.add(id)
+    result._objects.set(id, object)
 
-    return id
+    return result
   }
 
   public delete(id: number) {
-    this._ids.delete(id)
-    this._objects.delete(id)
+    let result = new MorphableContainer<T>(this)
+    result._ids.delete(id)
+    result._objects.delete(id)
+
+    return result
   }
 
-  public interpolate(other: MorphableContainer<T>, t: number): MorphableContainer<T> {
+  //TODO remove return type
+  public interpolate(that: MorphableContainer<T>, t: number): MorphableContainer<T> {
     throw new Error("//TODO Method not implemented.");
   }
 
   public advance(t: number): MorphableContainer<T> {
     throw new Error("//TODO Method not implemented.");
   }
+
+  public get size() { return this._ids.size }
 
   public *[Symbol.iterator](): Iterator<T> {
     for (let id of this._ids)
@@ -34,7 +48,6 @@ export class MorphableContainer<T extends Morphable<T>> implements Morphable<Mor
 
 
 
-  private _maxId = 0
-  private _ids: Set<number> = new Set<number>()
-  private _objects: Map<number, T> = new Map<number, T>()
+  private _ids = new Set<number>()
+  private _objects = new Map<number, T>()
 }

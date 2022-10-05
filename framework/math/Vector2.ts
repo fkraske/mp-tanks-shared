@@ -37,42 +37,42 @@ export class Vector2 implements Interpolatable<Vector2> {
     )
   }
 
-  public addV(other: Vector2) {
+  public addV(that: Vector2) {
     return new Vector2(
-      this.x + other.x,
-      this.y + other.y
+      this.x + that.x,
+      this.y + that.y
     )
   }
 
-  public subV(other: Vector2) {
+  public subV(that: Vector2) {
     return new Vector2(
-      this.x - other.x,
-      this.y - other.y
+      this.x - that.x,
+      this.y - that.y
     )
   }
 
-  public mulV(other: Vector2) {
+  public mulV(that: Vector2) {
     return new Vector2(
-      this.x * other.x,
-      this.y * other.y
+      this.x * that.x,
+      this.y * that.y
     )
   }
 
-  public divV(other: Vector2) {
+  public divV(that: Vector2) {
     return new Vector2(
-      this.x / other.x,
-      this.y / other.y
+      this.x / that.x,
+      this.y / that.y
     )
   }
 
-  public dot(other: Vector2) {
-    return this.x * other.x + this.y * other.y
+  public dot(that: Vector2) {
+    return this.x * that.x + this.y * that.y
   }
 
-  public interpolate(other: Vector2, t: number): Vector2 {
+  public interpolate(that: Vector2, t: number): Vector2 {
     return new Vector2(
-      this.x.interpolate(other.x, t),
-      this.y.interpolate(other.y, t)
+      this.x.interpolate(that.x, t),
+      this.y.interpolate(that.y, t)
     )
   }
 }

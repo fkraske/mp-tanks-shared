@@ -1,15 +1,21 @@
 import { Morphable } from "../morphable/Morphable"
+import { Leap } from "./Leap"
 import { TimeStamped } from "./TimeStamped"
 
 export class Snapshot<T extends Morphable<T>>
   extends TimeStamped<T> implements Morphable<Snapshot<T>> {
-  public interpolate(other: Snapshot<T>, t: number): Snapshot<T> {
-    return new Snapshot(this.timeStamp.interpolate(other.timeStamp, t), this.value.interpolate(other.value, t))
+  
+  public get state() { return this.value }
+
+  public interpolate(that: Snapshot<T>, t: number) {
+    return new Snapshot(this.timeStamp.interpolate(that.timeStamp, t), this.value.interpolate(that.value, t))
   }
 
-  public advance(t: number): Snapshot<T> {
+  public advance(t: number) {
     return new Snapshot(this.timeStamp + t, this.value.advance(t))
   }
 
-  public getState(): T { return this.value }
+  public leap(leap: Leap<T>) {
+    return new Snapshot(this.timeStamp, leap(this.value))
+  }
 }
