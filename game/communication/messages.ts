@@ -1,4 +1,4 @@
-import { TimeStamp } from "shared/framework/chronology/TimeStamp";
+import { TimeStamp } from "../../framework/chronology/TimeStamp";
 import { InputMessage } from "../../framework/communication/messages";
 import { ButtonState } from "../state/ButtonState";
 import { Direction } from "../state/Direction";
