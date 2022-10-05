@@ -1,6 +1,6 @@
 import { Morphable } from "./Morphable"
 
-//TODO id recycling
+//TODO ID management
 export class MorphableContainer<T extends Morphable<T>> implements Morphable<MorphableContainer<T>>, Iterable<T> {
   public constructor(original?: MorphableContainer<T>) {
     if (!original)

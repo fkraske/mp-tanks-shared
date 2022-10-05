@@ -69,10 +69,18 @@ export class Vector2 implements Interpolatable<Vector2> {
     return this.x * that.x + this.y * that.y
   }
 
-  public interpolate(that: Vector2, t: number): Vector2 {
+  public interpolate(that: Vector2, t: number) {
     return new Vector2(
       this.x.interpolate(that.x, t),
       this.y.interpolate(that.y, t)
     )
+  }
+
+  public get length() {
+    return Math.sqrt(this.x * this.x + this.y * this.y)
+  }
+
+  public get normalized() {
+    return this.div(this.length)
   }
 }
