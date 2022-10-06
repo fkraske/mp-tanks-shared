@@ -4,14 +4,14 @@ import { DirectionState } from "./model/DirectionState";
 
 export class MoveInputMessage extends InputMessage {
   public constructor(
-    timeStamp: TimeStamp,
+    inputTime: TimeStamp,
     public readonly directionState: DirectionState
-  ) { super(timeStamp) }
+  ) { super(inputTime) }
 }
 
 export class TurnInputMessage extends InputMessage {
   public constructor(
-    timeStamp: TimeStamp,
+    inputTime: TimeStamp,
     public readonly direction: number
-  ) { super(timeStamp) }
+  ) { super(inputTime) }
 }

@@ -7,7 +7,7 @@ export abstract class Message { }
 
 export abstract class ClientMessage extends Message { }
 export abstract class InputMessage extends ClientMessage {
-  public constructor(public readonly timeStamp: TimeStamp) { super() }
+  public constructor(public readonly inputTime: TimeStamp) { super() }
 }
 
 export abstract class ServerMessage extends Message { }

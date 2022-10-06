@@ -1,8 +1,6 @@
 import { ID } from "../../framework/id/ID"
 import { Vector2 } from "../../framework/math/Vector2"
 import { Morphable } from "../../framework/morphable/Morphable"
-import { ActiveState } from "../communication/model/ActiveState"
-import { Direction } from "../communication/model/Direction"
 import { DirectionState } from "../communication/model/DirectionState"
 import { Player } from "./Player"
 

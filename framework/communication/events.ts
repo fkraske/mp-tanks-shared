@@ -4,7 +4,11 @@ export namespace IOEvents {
     export const DISCONNECT = 'disconnect'
   }
 
+
+  
+  export const CUSTOM = 'custom'
+
   export namespace Custom {
-    export const MESSAGE = 'message'
+    
   }
 }
