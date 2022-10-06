@@ -1,4 +1,4 @@
-import { Vector2 } from "shared/framework/math/Vector2"
+import { Vector2 } from "../framework/math/Vector2"
 
 export namespace Constants {
   export const PORT = process.env.PORT ? parseInt(process.env.PORT) : 8080
