@@ -1,8 +1,8 @@
-import { ID } from "../../framework/id/ID"
-import { Vector2 } from "../../framework/math/Vector2"
-import { Morphable } from "../../framework/morphable/Morphable"
-import { DirectionState } from "../communication/model/DirectionState"
-import { Player } from "./Player"
+import { ID } from '../../framework/id/ID'
+import { Vector2 } from '../../framework/math/Vector2'
+import { Morphable } from '../../framework/morphable/Morphable'
+import { DirectionState } from '../communication/model/DirectionState'
+import { Player } from './Player'
 
 export class Game implements Morphable<Game> {
   public constructor(

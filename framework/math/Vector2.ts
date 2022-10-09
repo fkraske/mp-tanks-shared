@@ -1,4 +1,4 @@
-import { Interpolatable } from "../morphable/Interpolatable"
+import { Interpolatable } from '../morphable/Interpolatable'
 
 export class Vector2 implements Interpolatable<Vector2> {
   public static readonly Zero = new Vector2(0, 0)

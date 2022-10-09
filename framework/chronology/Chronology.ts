@@ -1,8 +1,8 @@
-import { Morphable } from "../morphable/Morphable";
-import { Leap } from "./Leap";
-import { Snapshot } from "./Snapshot";
-import { TimeStamp } from "./TimeStamp";
-import { TimeStamped } from "./TimeStamped";
+import { Morphable } from '../morphable/Morphable';
+import { Leap } from './Leap';
+import { Snapshot } from './Snapshot';
+import { TimeStamp } from './TimeStamp';
+import { TimeStamped } from './TimeStamped';
 
 export class Chronology<T extends Morphable<T>> {
   constructor(private root: Snapshot<T>, private length: number) { }

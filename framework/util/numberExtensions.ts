@@ -1,4 +1,4 @@
-import { Interpolatable } from "../morphable/Interpolatable"
+import { Interpolatable } from '../morphable/Interpolatable'
 
 declare global {
   export interface Number extends Interpolatable<number> {

@@ -1,4 +1,4 @@
-import { Morphable } from "./Morphable"
+import { Morphable } from './Morphable'
 
 //TODO ID management
 export class MorphableContainer<T extends Morphable<T>> implements Morphable<MorphableContainer<T>>, Iterable<T> {
@@ -32,11 +32,11 @@ export class MorphableContainer<T extends Morphable<T>> implements Morphable<Mor
 
   //TODO remove return type
   public interpolate(that: MorphableContainer<T>, t: number): MorphableContainer<T> {
-    throw new Error("//TODO Method not implemented.");
+    throw new Error('//TODO Method not implemented.');
   }
 
   public advance(t: number): MorphableContainer<T> {
-    throw new Error("//TODO Method not implemented.");
+    throw new Error('//TODO Method not implemented.');
   }
 
   public get size() { return this._ids.size }

@@ -1,9 +1,9 @@
-import { Angles } from "../../framework/math/Angles"
-import { Vector2 } from "../../framework/math/Vector2"
-import { Morphable } from "../../framework/morphable/Morphable"
-import { DirectionState } from "../communication/model/DirectionState"
-import { Bullet } from "./Bullet"
-import { PlayerInputState } from "./PlayerInputState"
+import { Angles } from '../../framework/math/Angles'
+import { Vector2 } from '../../framework/math/Vector2'
+import { Morphable } from '../../framework/morphable/Morphable'
+import { DirectionState } from '../communication/model/DirectionState'
+import { Bullet } from './Bullet'
+import { PlayerInputState } from './PlayerInputState'
 
 export class Player implements Morphable<Player> {
   public static readonly MoveSpeed = 0.2

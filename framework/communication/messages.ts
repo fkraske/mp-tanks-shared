@@ -1,7 +1,7 @@
-import { Leap } from "../chronology/Leap";
-import { TimeStamp } from "../chronology/TimeStamp";
-import { TimeStamped } from "../chronology/TimeStamped";
-import { Morphable } from "../morphable/Morphable";
+import { Leap } from '../chronology/Leap';
+import { TimeStamp } from '../chronology/TimeStamp';
+import { TimeStamped } from '../chronology/TimeStamped';
+import { Morphable } from '../morphable/Morphable';
 
 export abstract class Message { }
 

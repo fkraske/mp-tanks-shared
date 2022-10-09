@@ -1,6 +1,6 @@
-import { Morphable } from "../morphable/Morphable"
-import { Leap } from "./Leap"
-import { TimeStamped } from "./TimeStamped"
+import { Morphable } from '../morphable/Morphable'
+import { Leap } from './Leap'
+import { TimeStamped } from './TimeStamped'
 
 export class Snapshot<T extends Morphable<T>>
   extends TimeStamped<T> implements Morphable<Snapshot<T>> {
