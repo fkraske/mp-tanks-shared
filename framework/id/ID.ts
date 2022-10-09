@@ -1,5 +1,3 @@
-import assert = require("assert")
-
 export type ID = number
 
 export namespace ID {
@@ -70,7 +68,9 @@ export namespace ID {
     }
 
     private addID() {
-      assert(this.maxID <= INDIVIDUAL_MASK)
+      if (this.maxID > INDIVIDUAL_MASK)
+        throw new Error('Maximum ID exceeded')
+      
       return this.ids.push(this.maxID)
     }
 

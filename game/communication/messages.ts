@@ -1,6 +1,6 @@
-import { TimeStamp } from "../../framework/chronology/TimeStamp";
-import { InputMessage } from "../../framework/communication/messages";
-import { DirectionState } from "./model/DirectionState";
+import { TimeStamp } from '../../framework/chronology/TimeStamp';
+import { InputMessage } from '../../framework/communication/messages';
+import { DirectionState } from './model/DirectionState';
 
 export class MoveInputMessage extends InputMessage {
   public constructor(

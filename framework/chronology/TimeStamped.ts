@@ -1,4 +1,4 @@
-import { TimeStamp } from "./TimeStamp";
+import { TimeStamp } from './TimeStamp';
 
 export class TimeStamped<T> {
   constructor(
