@@ -1,6 +1,6 @@
 import { ID } from '../../framework/id/ID'
 import { Vector2 } from '../../framework/math/Vector2'
-import { Morphable } from '../../framework/morphable/Morphable'
+import type { Morphable } from '../../framework/morphable/Morphable'
 import { DirectionState } from '../communication/model/DirectionState'
 import { Player } from './Player'
 

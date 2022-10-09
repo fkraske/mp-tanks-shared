@@ -1,7 +1,7 @@
-import { Morphable } from '../morphable/Morphable';
-import { Leap } from './Leap';
+import type { Morphable } from '../morphable/Morphable';
+import type { Leap } from './Leap';
 import { Snapshot } from './Snapshot';
-import { TimeStamp } from './TimeStamp';
+import type { TimeStamp } from './TimeStamp';
 import { TimeStamped } from './TimeStamped';
 
 export class Chronology<T extends Morphable<T>> {

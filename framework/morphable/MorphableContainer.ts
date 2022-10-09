@@ -1,4 +1,4 @@
-import { Morphable } from './Morphable'
+import type { Morphable } from './Morphable'
 
 //TODO ID management
 export class MorphableContainer<T extends Morphable<T>> implements Morphable<MorphableContainer<T>>, Iterable<T> {

@@ -1,4 +1,4 @@
-import { Morphable } from '../../framework/morphable/Morphable';
+import type { Morphable } from '../../framework/morphable/Morphable';
 import { Vector2 } from '../../framework/math/Vector2';
 
 export class Bullet implements Morphable<Bullet> {
