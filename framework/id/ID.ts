@@ -1,3 +1,5 @@
+import { Utils } from '../util/numberUtils'
+
 export type ID = number
 
 export namespace ID {
@@ -41,7 +43,7 @@ export namespace ID {
     
     public globalToLocal(id: ID) {
       //TODO throw if out of bounds
-      return this.pools.findIndex((_, i) => individual(id).floor(POOL_SIZE) == i) * POOL_SIZE + individual(id) % POOL_SIZE
+      return this.pools.findIndex((_, i) => Utils.floor(individual(id), POOL_SIZE) == i) * POOL_SIZE + individual(id) % POOL_SIZE
     }
   }()
 

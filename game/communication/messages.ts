@@ -1,4 +1,4 @@
-import { TimeStamp } from '../../framework/chronology/TimeStamp';
+import type { TimeStamp } from '../../framework/chronology/TimeStamp';
 import { InputMessage } from '../../framework/communication/messages';
 import { DirectionState } from './model/DirectionState';
 

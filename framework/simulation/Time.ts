@@ -1,5 +1,7 @@
 export class Time {
-  public static get current() { return performance.timeOrigin + performance.now() }
+  public static readonly PERFORMANCE_SCALE = 1000
+  
+  public static get current() { return (performance.timeOrigin + performance.now()) / Time.PERFORMANCE_SCALE }
   public static get frame() { return Time._frame }
   public static get delta() { return Time._delta }
 

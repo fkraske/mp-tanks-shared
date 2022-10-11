@@ -6,6 +6,7 @@ import { Bullet } from './Bullet'
 import { PlayerInputState } from './PlayerInputState'
 
 export class Player implements Morphable<Player> {
+  public static readonly Radius = 0.05
   public static readonly MoveSpeed = 0.2
   public static readonly TurnSpeed = Math.PI
   public static readonly MaxLives = 3
@@ -30,7 +31,7 @@ export class Player implements Morphable<Player> {
 
   public advance(t: number) {
     return new Player(
-      this.position.addV(this.position.addV(this.input.getMoveVector().mul(t * Player.MoveSpeed))),
+      this.position.addV(this.input.getMoveVector().mul(t * Player.MoveSpeed)),
       Angles.normalize(this.angle + this.input.turnDirection * t * Player.TurnSpeed),
       this.input,
       this.bullet?.advance(t),

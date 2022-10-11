@@ -1,4 +1,5 @@
 import type { Interpolatable } from '../morphable/Interpolatable'
+import { Utils } from '../util/numberUtils'
 
 export class Vector2 implements Interpolatable<Vector2> {
   public static readonly Zero = new Vector2(0, 0)
@@ -71,9 +72,21 @@ export class Vector2 implements Interpolatable<Vector2> {
 
   public interpolate(that: Vector2, t: number) {
     return new Vector2(
-      this.x.interpolate(that.x, t),
-      this.y.interpolate(that.y, t)
+      Utils.interpolate(this.x, that.x, t),
+      Utils.interpolate(this.y, that.y, t)
     )
+  }
+
+  public flip() {
+    return new Vector2(-this.x, -this.y)
+  }
+  
+  public flipX() {
+    return new Vector2(-this.x, this.y)
+  }
+
+  public flipY() {
+    return new Vector2(this.x, -this.y)
   }
 
   public get length() {
@@ -81,6 +94,8 @@ export class Vector2 implements Interpolatable<Vector2> {
   }
 
   public get normalized() {
-    return this.div(this.length)
+    let l = this.length
+    
+    return this.div(l == 0 ? 1 : l)
   }
 }

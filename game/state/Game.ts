@@ -7,8 +7,8 @@ import { Player } from './Player'
 export class Game implements Morphable<Game> {
   public constructor(
     public readonly state = GameState.Starting,
-    public readonly player1 = new Player(new Vector2(-0.5, 0), 90),
-    public readonly player2 = new Player(new Vector2(0.5, 0), 90)
+    public readonly player1 = new Player(new Vector2(-0.5, 0), Math.PI),
+    public readonly player2 = new Player(new Vector2(0.5, 0), -Math.PI)
   ) { }
 
   public interpolate(that: Game, t: number) {

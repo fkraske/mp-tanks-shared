@@ -1,4 +1,5 @@
 import type { Morphable } from '../morphable/Morphable'
+import { Utils } from '../util/numberUtils'
 import type { Leap } from './Leap'
 import { TimeStamped } from './TimeStamped'
 
@@ -8,7 +9,7 @@ export class Snapshot<T extends Morphable<T>>
   public get state() { return this.value }
 
   public interpolate(that: Snapshot<T>, t: number) {
-    return new Snapshot(this.timeStamp.interpolate(that.timeStamp, t), this.value.interpolate(that.value, t))
+    return new Snapshot(Utils.interpolate(this.timeStamp, that.timeStamp, t), this.value.interpolate(that.value, t))
   }
 
   public advance(t: number) {
