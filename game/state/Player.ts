@@ -2,10 +2,12 @@ import { Angles } from '../../framework/math/Angles'
 import { Vector2 } from '../../framework/math/Vector2'
 import type { Morphable } from '../../framework/morphable/Morphable'
 import { DirectionState } from '../communication/model/DirectionState'
+import { LEVEL_EXTENTS } from '../constants'
 import { Bullet } from './Bullet'
+import { PhysicsObject } from './PhysicsObject'
 import { PlayerInputState } from './PlayerInputState'
 
-export class Player implements Morphable<Player> {
+export class Player implements Morphable<Player>, PhysicsObject {
   public static readonly Radius = 0.05
   public static readonly MoveSpeed = 0.2
   public static readonly TurnSpeed = Math.PI
@@ -20,6 +22,12 @@ export class Player implements Morphable<Player> {
     public readonly lives: number = Player.MaxLives
   ) { }
 
+  public get velocity() {
+    return this.input.getMoveVector().mul(Player.MoveSpeed)
+  }
+  
+  public get radius() { return Player.Radius }
+  
   public interpolate(that: Player, t: number) {
     return new Player(
       this.position.interpolate(that.position, t),
