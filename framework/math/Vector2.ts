@@ -10,6 +10,10 @@ export class Vector2 implements Interpolatable<Vector2> {
     public readonly y: number
   ) { }
 
+  public static fromAngle(angle: number) {
+    return new Vector2(Math.sin(angle), Math.cos(angle))
+  }
+  
   public add(scalar: number) {
     return new Vector2(
       this.x + scalar,

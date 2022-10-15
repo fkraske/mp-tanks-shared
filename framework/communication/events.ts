@@ -1,6 +1,7 @@
 export namespace IOEvents {
   export namespace Builtin {
-    export const CONNECTION = 'connection'
+    export const ESTABLISH_CONNECTION = 'connection'
+    export const CONNECT = 'connect'
     export const DISCONNECT = 'disconnect'
   }
 

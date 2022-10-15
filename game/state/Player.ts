@@ -10,6 +10,7 @@ export class Player implements Morphable<Player> {
   public static readonly MoveSpeed = 0.2
   public static readonly TurnSpeed = Math.PI
   public static readonly MaxLives = 3
+  public static readonly CannonLength = 0.07
 
   public constructor(
     public readonly position: Vector2,
