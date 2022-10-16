@@ -5,7 +5,7 @@ import type { TimeStamp } from './TimeStamp';
 import { TimeStamped } from './TimeStamped';
 
 export class Chronology<T extends Morphable<T>> {
-  constructor(private root: Snapshot<T>, private length: number) { }
+  constructor(private root: Snapshot<T>) { }
 
   public get(timeStamp: TimeStamp) {
     let result = this.root;
