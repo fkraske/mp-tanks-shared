@@ -1,10 +1,13 @@
 import { Angles } from '../../framework/math/Angles'
 import { Vector2 } from '../../framework/math/Vector2'
 import type { Morphable } from '../../framework/morphable/Morphable'
+import { Utils } from '../../framework/util/numberUtils'
+import { ActiveState } from '../communication/model/ActiveState'
+import { Direction } from '../communication/model/Direction'
 import { DirectionState } from '../communication/model/DirectionState'
 import { LEVEL_EXTENTS } from '../constants'
 import { Bullet } from './Bullet'
-import { PhysicsObject } from './physics'
+import { Collision, PhysicsObject } from './physics'
 import { PlayerInputState } from './PlayerInputState'
 
 export class Player implements Morphable<Player>, PhysicsObject {
@@ -58,12 +61,49 @@ export class Player implements Morphable<Player>, PhysicsObject {
     )
   }
 
+  public stopMoveX() {
+    return this
+      .addMoveInput(new DirectionState(Direction.Right, ActiveState.Inactive))
+      .addMoveInput(new DirectionState(Direction.Left, ActiveState.Inactive))
+  }
+
+  public stopMoveY() {
+    return this
+      .addMoveInput(new DirectionState(Direction.Up, ActiveState.Inactive))
+      .addMoveInput(new DirectionState(Direction.Down, ActiveState.Inactive))
+  }
+
+  public handleLevelCollision(point: Vector2) {
+    const d = point.abs.subV(LEVEL_EXTENTS).abs
+    return d.x < d.y ? this.stopMoveX() : this.stopMoveY()
+  }
+  
   public addTurnInput(direction: number) {
     return new Player(
       this.position,
       this.angle,
       this.input.addTurnInput(direction),
       this.bullet,
+      this.lives
+    )
+  }
+
+  public getHurt() {
+    return new Player(
+      this.position,
+      this.angle,
+      this.input,
+      this.bullet,
+      this.lives - 1
+    )
+  }
+
+  public destroyBullet() {
+    return new Player(
+      this.position,
+      this.angle,
+      this.input,
+      undefined,
       this.lives
     )
   }

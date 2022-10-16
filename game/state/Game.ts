@@ -1,9 +1,8 @@
 import { ID } from '../../framework/id/ID'
 import { Vector2 } from '../../framework/math/Vector2'
 import type { Morphable } from '../../framework/morphable/Morphable'
-import { Time } from '../../framework/simulation/Time'
 import { DirectionState } from '../communication/model/DirectionState'
-import { findNextObjectLevelCollision, findObjectObjectCollision } from './physics'
+import { Collision, NonCollision } from './physics'
 import { Player } from './Player'
 
 export class Game implements Morphable<Game> {
@@ -22,9 +21,9 @@ export class Game implements Morphable<Game> {
   }
 
   public advance(t: number): Game {
-    const nextT = t
+    const tRemaining = t
     const interruption = this.findNextInterruption()
-    t = Math.min(t, interruption.t - Time.frame)
+    t = Math.min(t, interruption.t)
 
     let result = interruption.handle(
       new Game(
@@ -34,41 +33,35 @@ export class Game implements Morphable<Game> {
       )
     )
 
-    return nextT == t ? result : result.advance(nextT - t)
+    return tRemaining == t ? result : result.advance(tRemaining - t)
   }
 
   private findNextInterruption() {
     return Interruption.reduce(
-      new PlayerLevelCollision(findNextObjectLevelCollision(this.player1), 0),
-      new PlayerLevelCollision(findNextObjectLevelCollision(this.player2), 1),
+      new PlayerLevelCollision(Collision.findObjectLevel(this.player1), 0),
+      new PlayerLevelCollision(Collision.findObjectLevel(this.player2), 1),
       new BulletLevelCollision(
         this.player1.bullet == null
-          ? Infinity
-          : findNextObjectLevelCollision(this.player1.bullet!),
+          ? NonCollision
+          : Collision.findObjectLevel(this.player1.bullet!),
         0
       ),
       new BulletLevelCollision(
         this.player2.bullet == null
-          ? Infinity
-          : findNextObjectLevelCollision(this.player2.bullet!),
+          ? NonCollision
+          : Collision.findObjectLevel(this.player2.bullet!),
         1
       ),
-      this.findNextPlayerBulletCollision()
-    )
-  }
-
-  private findNextPlayerBulletCollision() {
-    return Interruption.reduce(
       new PlayerBulletCollision(
         this.player2.bullet == null
-          ? Infinity
-          : findObjectObjectCollision(this.player1, this.player2.bullet!),
+          ? NonCollision
+          : Collision.findObjectObject(this.player1, this.player2.bullet!),
         0
       ),
       new PlayerBulletCollision(
         this.player1.bullet == null
-          ? Infinity
-          : findObjectObjectCollision(this.player2, this.player1.bullet!),
+          ? NonCollision
+          : Collision.findObjectObject(this.player2, this.player1.bullet!),
         1
       )
     )
@@ -89,12 +82,18 @@ export class Game implements Morphable<Game> {
       playerID === 1 ? this.player2.addTurnInput(direction) : this.player2,
     )
   }
+
+  public switchState(newState: GameState) {
+    return new Game(
+      newState,
+      this.player1,
+      this.player2
+    )
+  }
 }
 
 abstract class Interruption {
-  public constructor(
-    public readonly t: number
-  ) { }
+  public abstract readonly t: number
 
   public static reduce(...interruptions: Interruption[]) {
     return interruptions.reduce((acc, i) => acc.t < i.t ? acc : i)
@@ -109,34 +108,54 @@ abstract class Interruption {
 
 class PlayerLevelCollision extends Interruption {
   public constructor(
-    t: number,
+    public readonly collision: Collision,
     public readonly playerID: ID
-  ) { super(t) }
+  ) { super() }
 
-  protected handleImpl(game: Game): Game {
-    throw new Error('Method not implemented.')
+  public override get t() { return this.collision.t }
+
+  protected handleImpl(game: Game) {
+    return new Game(
+      game.state,
+      this.playerID == 0 ? game.player1.handleLevelCollision(this.collision.point!) : game.player1,
+      this.playerID == 1 ? game.player2.handleLevelCollision(this.collision.point!) : game.player2
+    )
   }
 }
 
 class BulletLevelCollision extends Interruption {
   public constructor(
-    t: number,
+    public readonly collision: Collision,
     public readonly playerID: ID
-  ) { super(t) }
+  ) { super() }
 
-  protected handleImpl(game: Game): Game {
-    throw new Error('Method not implemented.')
+  public override get t() { return this.collision.t }
+
+  protected handleImpl(game: Game) {
+    return new Game(
+      game.state,
+      this.playerID == 0 ? game.player1.destroyBullet() : game.player1,
+      this.playerID == 1 ? game.player2.destroyBullet() : game.player2,
+    )
   }
 }
 
 class PlayerBulletCollision extends Interruption {
   public constructor(
-    t: number,
+    public readonly collision: Collision,
     public readonly playerID: ID
-  ) { super(t) }
+  ) { super() }
 
-  protected handleImpl(game: Game): Game {
-    throw new Error('Method not implemented.')
+  public override get t() { return this.collision.t }
+
+  protected handleImpl(game: Game) {
+    game = new Game(
+      game.state,
+      this.playerID == 0 ? game.player1.getHurt() : game.player1.destroyBullet(),
+      this.playerID == 1 ? game.player2.getHurt() : game.player2.destroyBullet()
+    )
+    
+    return game.player1.lives == 0 || game.player2.lives == 0 ? game.switchState(GameState.Finished) : game
   }
 }
 

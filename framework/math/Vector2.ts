@@ -109,4 +109,11 @@ export class Vector2 implements Interpolatable<Vector2> {
     
     return this.div(l == 0 ? 1 : l)
   }
+
+  public get abs() {
+    return new Vector2(
+      Math.abs(this.x),
+      Math.abs(this.y)
+    )
+  }
 }
