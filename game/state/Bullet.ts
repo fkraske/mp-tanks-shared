@@ -1,9 +1,8 @@
-import type { Morphable } from '../../framework/morphable/Morphable';
 import { Vector2 } from '../../framework/math/Vector2';
-import { LEVEL_EXTENTS } from '../constants';
-import { PhysicsObject } from './physics';
+import type { Morphable } from '../../framework/morphable/Morphable';
+import * as physics from './physics';
 
-export class Bullet implements Morphable<Bullet>, PhysicsObject {
+export class Bullet implements Morphable<Bullet>, physics.PhysicsObject {
   public static readonly Radius = 0.015
   
   public constructor(

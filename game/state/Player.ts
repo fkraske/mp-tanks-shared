@@ -1,13 +1,12 @@
 import { Angles } from '../../framework/math/Angles'
 import { Vector2 } from '../../framework/math/Vector2'
 import type { Morphable } from '../../framework/morphable/Morphable'
-import { Utils } from '../../framework/util/numberUtils'
 import { ActiveState } from '../communication/model/ActiveState'
 import { Direction } from '../communication/model/Direction'
 import { DirectionState } from '../communication/model/DirectionState'
 import { LEVEL_EXTENTS } from '../constants'
 import { Bullet } from './Bullet'
-import { Collision, PhysicsObject } from './physics'
+import type { PhysicsObject } from './physics'
 import { PlayerInputState } from './PlayerInputState'
 
 export class Player implements Morphable<Player>, PhysicsObject {
