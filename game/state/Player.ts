@@ -4,7 +4,7 @@ import type { Morphable } from '../../framework/morphable/Morphable'
 import { DirectionState } from '../communication/model/DirectionState'
 import { LEVEL_EXTENTS } from '../constants'
 import { Bullet } from './Bullet'
-import { PhysicsObject } from './PhysicsObject'
+import { PhysicsObject } from './physics'
 import { PlayerInputState } from './PlayerInputState'
 
 export class Player implements Morphable<Player>, PhysicsObject {

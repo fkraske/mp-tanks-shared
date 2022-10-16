@@ -4,6 +4,7 @@ import { Utils } from '../util/numberUtils'
 export class Vector2 implements Interpolatable<Vector2> {
   public static readonly Zero = new Vector2(0, 0)
   public static readonly One = new Vector2(1, 1)
+  public static readonly Inf = new Vector2(Infinity, Infinity)
   
   public constructor(
     public readonly x: number,
@@ -12,6 +13,12 @@ export class Vector2 implements Interpolatable<Vector2> {
 
   public static fromAngle(angle: number) {
     return new Vector2(Math.sin(angle), Math.cos(angle))
+  }
+
+  public static center(...vectors: Vector2[]) {
+    return vectors.length == 0
+      ? Vector2.Zero
+      : vectors.reduce((acc, v) => acc.addV(v), Vector2.Zero).div(vectors.length)
   }
   
   public add(scalar: number) {
