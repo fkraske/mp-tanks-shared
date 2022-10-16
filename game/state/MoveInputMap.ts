@@ -28,15 +28,6 @@ export class MoveInputMap {
     )
   }
 
-  public clone() {
-    return new MoveInputMap(
-      this.up,
-      this.right,
-      this.down,
-      this.left
-    )
-  }
-
   public *[Symbol.iterator](): Iterator<DirectionState> {
     yield new DirectionState(Direction.Up, this.up)
     yield new DirectionState(Direction.Right, this.right)

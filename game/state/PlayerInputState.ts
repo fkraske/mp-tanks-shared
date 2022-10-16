@@ -19,7 +19,7 @@ export class PlayerInputState {
     
     for (const p of this.movement)
       if (p.activeState === ActiveState.Active)
-        result.addV(p.direction.vector)
+        result = result.addV(p.direction.vector)
 
     return result.normalized
   }

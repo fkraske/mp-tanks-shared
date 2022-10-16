@@ -25,7 +25,7 @@ export class Game implements Morphable<Game> {
     const interruption = this.findNextInterruption()
     t = Math.min(t, interruption.t)
 
-    let result = interruption.handle(
+    const result = interruption.handle(
       new Game(
         this.state,
         this.player1.advance(t),
