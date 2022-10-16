@@ -12,7 +12,7 @@ export class Vector2 implements Interpolatable<Vector2> {
   ) { }
 
   public static fromAngle(angle: number) {
-    return new Vector2(Math.sin(angle), Math.cos(angle))
+    return new Vector2(-Math.sin(angle), Math.cos(angle))
   }
 
   public static center(...vectors: Vector2[]) {

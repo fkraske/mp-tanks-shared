@@ -27,22 +27,34 @@ export class Chronology<T extends Morphable<T>> {
   }
 
   public addTimeStampedLeap(leap: TimeStamped<Leap<T>>) {
+    const i = this.leaps.findIndex(l => l.timeStamp > leap.timeStamp)
+    
     this.leaps.splice(
-      this.leaps.findIndex((l) => l.timeStamp > leap.timeStamp),
+      i == -1 ? this.leaps.length : i,
       0,
       leap
     )
   }
 
-  public updateRoot(newRootTimeStamp: TimeStamp) {
-    if (newRootTimeStamp < this.root.timeStamp) {
+  public updateRoot(snapshot: Snapshot<T>) {
+    this.trim(snapshot.timeStamp)
+    this.root = snapshot
+  }
+
+  public trim(minTime: TimeStamp) {
+    if (minTime < this.root.timeStamp) {
       console.warn('Attempted to move root into the past')
       return
     }
 
-    const newRoot = this.get(newRootTimeStamp)
-    this.leaps = this.leaps.filter((l) => l.timeStamp >= newRootTimeStamp)
+    const newRoot = this.get(minTime)
+    this.leaps = this.leaps.filter((l) => l.timeStamp >= minTime)
     this.root = newRoot
+  }
+
+  public *[Symbol.iterator](): Iterator<TimeStamped<Leap<T>>> {
+    for (let l of this.leaps)
+      yield l
   }
 
 

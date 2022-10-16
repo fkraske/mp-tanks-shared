@@ -1,16 +1,18 @@
 import { Vector2 } from '../../framework/math/Vector2';
 import { ActiveState } from '../communication/model/ActiveState';
-import { Direction } from '../communication/model/Direction';
-import { DirectionState } from '../communication/model/DirectionState';
+import { MoveDirection } from '../communication/model/MoveDirection';
+import { MoveDirectionState } from '../communication/model/MoveDirectionState';
+import { TurnDirectionState } from '../communication/model/TurnDirectionState';
 import { MoveInputMap } from './MoveInputMap';
+import { TurnInputMap } from './TurnInputMap';
 
 export class PlayerInputState {
   public constructor(
     public readonly movement: MoveInputMap = new MoveInputMap(),
-    public readonly turnDirection = 0
+    public readonly turn: TurnInputMap = new TurnInputMap()
   ) { }
 
-  public getMoveState(direction: Direction) {
+  public getMoveState(direction: MoveDirection) {
     return this.movement.get(direction)
   }
 
@@ -24,14 +26,17 @@ export class PlayerInputState {
     return result.normalized
   }
 
-  public addMoveInput(directionState: DirectionState) {
+  public addMoveInput(directionState: MoveDirectionState) {
     return new PlayerInputState(
       this.movement.with(directionState.direction, directionState.activeState),
-      this.turnDirection
+      this.turn
     )
   }
 
-  public addTurnInput(direction: number) {
-    return new PlayerInputState(this.movement, direction)
+  public addTurnInput(directionState: TurnDirectionState) {
+    return new PlayerInputState(
+      this.movement,
+      this.turn.with(directionState.direction, directionState.activeState)
+    )
   }
 }

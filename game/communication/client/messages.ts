@@ -1,8 +1,8 @@
 import type { Input } from '../../../framework/communication/messages';
-import { DirectionState } from '../model/DirectionState';
+import { MoveDirectionState } from '../model/MoveDirectionState';
 
 export interface MoveInputMessage extends Input {
-  readonly directionState: DirectionState
+  readonly directionState: MoveDirectionState
 }
 
 export interface TurnInputMessage extends Input {

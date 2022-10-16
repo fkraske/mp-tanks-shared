@@ -1,6 +1,6 @@
 import { ActiveState } from '../communication/model/ActiveState';
-import { Direction } from '../communication/model/Direction';
-import { DirectionState } from '../communication/model/DirectionState';
+import { MoveDirection } from '../communication/model/MoveDirection';
+import { MoveDirectionState } from '../communication/model/MoveDirectionState';
 
 export class MoveInputMap {
   public constructor(
@@ -10,28 +10,28 @@ export class MoveInputMap {
     public readonly left: ActiveState = ActiveState.Inactive
   ) { }
 
-  public get(direction: Direction) {
+  public get(direction: MoveDirection) {
     switch (direction) {
-      case Direction.Up: return this.up
-      case Direction.Right: return this.right
-      case Direction.Down: return this.down
-      case Direction.Left: return this.left
+      case MoveDirection.Up: return this.up
+      case MoveDirection.Right: return this.right
+      case MoveDirection.Down: return this.down
+      case MoveDirection.Left: return this.left
     }
   }
 
-  public with(direction: Direction, state: ActiveState) {
+  public with(direction: MoveDirection, state: ActiveState) {
     return new MoveInputMap(
-      direction == Direction.Up ? state : this.up,
-      direction == Direction.Right ? state : this.right,
-      direction == Direction.Down ? state : this.down,
-      direction == Direction.Left ? state : this.left
+      direction == MoveDirection.Up ? state : this.up,
+      direction == MoveDirection.Right ? state : this.right,
+      direction == MoveDirection.Down ? state : this.down,
+      direction == MoveDirection.Left ? state : this.left
     )
   }
 
-  public *[Symbol.iterator](): Iterator<DirectionState> {
-    yield new DirectionState(Direction.Up, this.up)
-    yield new DirectionState(Direction.Right, this.right)
-    yield new DirectionState(Direction.Down, this.down)
-    yield new DirectionState(Direction.Left, this.left)
+  public *[Symbol.iterator](): Iterator<MoveDirectionState> {
+    yield new MoveDirectionState(MoveDirection.Up, this.up)
+    yield new MoveDirectionState(MoveDirection.Right, this.right)
+    yield new MoveDirectionState(MoveDirection.Down, this.down)
+    yield new MoveDirectionState(MoveDirection.Left, this.left)
   }
 }
