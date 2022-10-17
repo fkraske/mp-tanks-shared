@@ -59,8 +59,8 @@ export class Game implements Morphable<Game> {
   }
 
   private findNextInterruption() {
-    return this.state !== GameState.Playing
-      ? new GameRestart((this.state as any).waitRemaining)
+    return this.state instanceof GameState.Finished
+      ? new GameRestart(this.state.waitRemaining)
       : Interruption.reduce(
           new PlayerLevelCollision(Collision.findObjectLevel(this.player1), 0),
           new PlayerLevelCollision(Collision.findObjectLevel(this.player2), 1),
