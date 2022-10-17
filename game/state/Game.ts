@@ -29,7 +29,7 @@ export class Game implements Morphable<Game> {
 
   public interpolate(that: Game, t: number) {
     return new Game(
-      this.state.interpolate(that, t),
+      this.state.interpolate(that.state, t),
       this.player1.interpolate(that.player1, t),
       this.player2.interpolate(that.player2, t)
     )
