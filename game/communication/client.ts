@@ -1,5 +1,6 @@
 import type { Leap } from '../../framework/chronology/Leap'
 import type { TimeStamp } from '../../framework/chronology/TimeStamp'
+import { TimeStamped } from '../../framework/chronology/TimeStamped'
 import { ClientEvent } from '../../framework/communication/client'
 import { ID } from '../../framework/id/ID'
 import { Game } from '../state/Game'
@@ -22,11 +23,12 @@ class ClientMoveEvent extends ClientGameEvent {
     name: string,
     public readonly moveDirectionState: MoveDirectionState
   ) { super(name) }
-  
-  public override getLeap(connectionID: ID, value: {}): Leap<Game> {
-    return g => {
-      return g.addPlayerMoveInput(connectionID, this.moveDirectionState)
-    }
+
+  public override getTimeStampedLeap(connectionID: ID, value: { inputTime: TimeStamp }): TimeStamped<Leap<Game>> {
+    return new TimeStamped(
+      value.inputTime,
+      g => { return g.addPlayerMoveInput(connectionID, this.moveDirectionState) }
+    )
   }
 }
 
@@ -36,10 +38,11 @@ class ClientTurnEvent extends ClientGameEvent {
     public readonly turnDirectionState: TurnDirectionState
   ) { super(name) }
 
-  public override getLeap(connectionID: ID, value: {}): Leap<Game> {
-    return g => {
-      return g.addPlayerTurnInput(connectionID, this.turnDirectionState)
-    }
+  public override getTimeStampedLeap(connectionID: ID, value: { inputTime: TimeStamp }): TimeStamped<Leap<Game>> {
+    return new TimeStamped(
+      value.inputTime,
+      g => { return g.addPlayerTurnInput(connectionID, this.turnDirectionState) }
+    )
   }
 }
 
@@ -94,3 +97,19 @@ export const TurnCounterClockwiseEnd = new ClientTurnEvent(
   'turn-counterclockwise-end',
   new TurnDirectionState(TurnDirection.CounterClockwise, ActiveState.Inactive)
 )
+
+export const AllEvents = [
+  MoveUpStart,
+  MoveRightStart,
+  MoveDownStart,
+  MoveLeftStart,
+  MoveUpEnd,
+  MoveRightEnd,
+  MoveDownEnd,
+  MoveLeftEnd,
+
+  TurnClockwiseStart,
+  TurnCounterClockwiseStart,
+  TurnClockwiseEnd,
+  TurnCounterClockwiseEnd
+]
