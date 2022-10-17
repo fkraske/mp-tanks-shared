@@ -13,8 +13,8 @@ import { TurnDirectionState } from './model/TurnDirectionState'
 abstract class ClientGameEvent extends ClientEvent<{ inputTime: TimeStamp }, Game> {
   public constructor(name: string) { super(name) }
 
-  public override checkType(value: any): value is { inputTime: TimeStamp } {
-    return typeof(value.inputTime) === 'number'
+  public override checkType(payload: any): payload is { inputTime: TimeStamp } {
+    return typeof(payload.inputTime) === 'number'
   }
 }
 
@@ -24,9 +24,9 @@ class ClientMoveEvent extends ClientGameEvent {
     public readonly moveDirectionState: MoveDirectionState
   ) { super(name) }
 
-  public override getTimeStampedLeap(connectionID: ID, value: { inputTime: TimeStamp }): TimeStamped<Leap<Game>> {
+  public override getTimeStampedLeap(connectionID: ID, payload: { inputTime: TimeStamp }): TimeStamped<Leap<Game>> {
     return new TimeStamped(
-      value.inputTime,
+      payload.inputTime,
       g => { return g.addPlayerMoveInput(connectionID, this.moveDirectionState) }
     )
   }
@@ -38,9 +38,9 @@ class ClientTurnEvent extends ClientGameEvent {
     public readonly turnDirectionState: TurnDirectionState
   ) { super(name) }
 
-  public override getTimeStampedLeap(connectionID: ID, value: { inputTime: TimeStamp }): TimeStamped<Leap<Game>> {
+  public override getTimeStampedLeap(connectionID: ID, payload: { inputTime: TimeStamp }): TimeStamped<Leap<Game>> {
     return new TimeStamped(
-      value.inputTime,
+      payload.inputTime,
       g => { return g.addPlayerTurnInput(connectionID, this.turnDirectionState) }
     )
   }
