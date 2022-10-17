@@ -52,6 +52,10 @@ export class Chronology<T extends Morphable<T>> {
     this.root = newRoot
   }
 
+  public clear() {
+    this.leaps = []
+  }
+
   public *[Symbol.iterator](): Iterator<TimeStamped<Leap<T>>> {
     for (let l of this.leaps)
       yield l
@@ -59,5 +63,5 @@ export class Chronology<T extends Morphable<T>> {
 
 
   
-  private leaps: Array<TimeStamped<Leap<T>>> = []
+  private leaps: TimeStamped<Leap<T>>[] = []
 }
