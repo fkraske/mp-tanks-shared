@@ -22,19 +22,19 @@ export class Collision {
 
     //TODO probably can be simplified quite a bit
     if (cx && cy) {
-      const tx = (LEVEL_EXTENTS.x * Math.sign(v.x) - p.x - r) / v.x
-      const ty = (LEVEL_EXTENTS.y * Math.sign(v.y) - p.y - r) / v.y
+      const tx = ((LEVEL_EXTENTS.x - r) * Math.sign(v.x) - p.x) / v.x
+      const ty = ((LEVEL_EXTENTS.y - r) * Math.sign(v.y) - p.y) / v.y
       const t = Math.min(tx, ty)
       const offset = new Vector2(Math.sign(v.x) * r, Math.sign(v.y) * r)
 
       return new Collision(t, p.addV(v.mul(t)).addV(offset))
     } else if (cx && !cy) {
-      const t = (LEVEL_EXTENTS.x * Math.sign(v.x) - p.x - r) / v.x
+      const t = ((LEVEL_EXTENTS.x - r) * Math.sign(v.x) - p.x) / v.x
       const offset = new Vector2(Math.sign(v.x) * r, 0)
 
       return new Collision(t, p.addV(v.mul(t)).addV(offset))
     } else if (!cx && cy) {
-      const t = (LEVEL_EXTENTS.y * Math.sign(v.y) - p.y - r) / v.y
+      const t = ((LEVEL_EXTENTS.x - r) * Math.sign(v.y) - p.y) / v.y
       const offset = new Vector2(0, Math.sign(v.y) * r)
 
       return new Collision(t, p.addV(v.mul(t)).addV(offset))
