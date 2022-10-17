@@ -12,7 +12,7 @@ export class Game implements Morphable<Game> {
   public static readonly FinishDuration = 5
 
   public constructor(
-    public readonly state = GameState.Playing,
+    public readonly state: GameState = GameState.Playing,
     public readonly player1 = new Player(new Vector2(-0.5, 0), Math.PI / 2),
     public readonly player2 = new Player(new Vector2(0.5, 0), -Math.PI / 2)
   ) { }
@@ -216,7 +216,7 @@ export abstract class GameState implements Morphable<GameState> {
     public advance(t: number): GameState {
       return this
     }
-  }()
+  } ()
   public static Finished = class extends GameState {
     public constructor(public readonly waitRemaining: number) { super() }
 

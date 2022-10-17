@@ -6,8 +6,6 @@ import { TimeStamped } from './TimeStamped'
 export class Snapshot<T extends Morphable<T>>
   extends TimeStamped<T> implements Morphable<Snapshot<T>> {
   
-  public get state() { return this.value }
-
   public interpolate(that: Snapshot<T>, t: number) {
     return new Snapshot(Utils.interpolate(this.timeStamp, that.timeStamp, t), this.value.interpolate(that.value, t))
   }
