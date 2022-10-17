@@ -101,7 +101,7 @@ export class Player implements Morphable<Player>, PhysicsObject {
       this.input.shoot === ActiveState.Inactive && activeState === ActiveState.Active && !this.bullet
         ? new Bullet(
             this.position.addV(this.forward.mul(Player.CannonLength)),
-            this.position.addV(this.forward.mul(Player.BulletSpeed))
+            this.forward.mul(Player.BulletSpeed)
           )
         : this.bullet,
       this.lives
