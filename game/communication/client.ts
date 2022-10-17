@@ -18,7 +18,7 @@ abstract class ClientGameEvent extends ClientEvent<{ inputTime: TimeStamp }, Gam
   }
 }
 
-class ClientMoveEvent extends ClientGameEvent {
+export class ClientMoveEvent extends ClientGameEvent {
   public constructor(
     name: string,
     public readonly moveDirectionState: MoveDirectionState
@@ -32,7 +32,7 @@ class ClientMoveEvent extends ClientGameEvent {
   }
 }
 
-class ClientTurnEvent extends ClientGameEvent {
+export class ClientTurnEvent extends ClientGameEvent {
   public constructor(
     name: string,
     public readonly turnDirectionState: TurnDirectionState
@@ -46,7 +46,7 @@ class ClientTurnEvent extends ClientGameEvent {
   }
 }
 
-class ClientShootEvent extends ClientGameEvent {
+export class ClientShootEvent extends ClientGameEvent {
   public constructor(
     name: string,
     public readonly shootActiveState: ActiveState

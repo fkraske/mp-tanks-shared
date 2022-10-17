@@ -92,7 +92,7 @@ export class Vector2 implements Interpolatable<Vector2> {
     )
   }
 
-  public flip() {
+  public negate() {
     return new Vector2(-this.x, -this.y)
   }
   

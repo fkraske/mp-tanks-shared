@@ -70,7 +70,7 @@ export class Player implements Morphable<Player>, PhysicsObject {
       this.position.interpolate(that.position, t),
       Angles.interpolate(this.angle, that.angle, t),
       t > 0 ? that.input : this.input,
-      that.bullet ? this.bullet?.interpolate(that.bullet, t) : that.bullet,
+      this.bullet && that.bullet ? this.bullet.interpolate(that.bullet, t) : that.bullet,
       t > 0 ? that.lives : this.lives
     )
   }
