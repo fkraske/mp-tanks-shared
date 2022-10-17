@@ -42,10 +42,7 @@ export class Chronology<T extends Morphable<T>> {
   }
 
   public trim(minTime: TimeStamp) {
-    if (minTime < this.root.timeStamp) {
-      console.warn('Attempted to move root into the past')
-      return
-    }
+    minTime = Math.max(this.root.timeStamp, minTime)
 
     const newRoot = this.get(minTime)
     this.leaps = this.leaps.filter((l) => l.timeStamp >= minTime)
