@@ -98,7 +98,7 @@ export const TurnCounterClockwiseEnd = new ClientTurnEvent(
   new TurnDirectionState(TurnDirection.CounterClockwise, ActiveState.Inactive)
 )
 
-export const AllEvents = [
+export const All = [
   MoveUpStart,
   MoveRightStart,
   MoveDownStart,
