@@ -1,11 +1,14 @@
-export function deepMerge<T>(target: T, source: T) {
-  return deepMergeInternal(target, source) as T
+export function restoreClassObject<T>(target: T, source: T) {
+  return restoreClassObjectInternal(target, source) as T
 }
 
-function deepMergeInternal(target: any, source: any) {
+function restoreClassObjectInternal(target: any, source: any) {
   for (const key in source)
-    if (typeof(source[key]) === 'object' && source[key])
-      deepMergeInternal(target[key] = target[key] || {}, source[key])
+    if (typeof(source[key]) === 'object')
+      if (source[key] == null)
+        target[key] = null
+      else
+        restoreClassObjectInternal(target[key] = target[key] ?? {}, source[key])
     else
       target[key] = source[key]
 

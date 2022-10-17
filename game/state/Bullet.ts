@@ -3,7 +3,7 @@ import type { Morphable } from '../../framework/morphable/Morphable';
 import * as physics from './physics';
 
 export class Bullet implements Morphable<Bullet>, physics.PhysicsObject {
-  public static readonly Radius = 0.015
+  public static readonly Radius = 0.03
   
   public constructor(
     public readonly position: Vector2,

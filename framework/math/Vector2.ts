@@ -11,6 +11,10 @@ export class Vector2 implements Interpolatable<Vector2> {
     public readonly y: number
   ) { }
 
+  public static cloneDeserialized(vector: Vector2) {
+    return new Vector2(vector.x, vector.y)
+  }
+
   public static fromAngle(angle: number) {
     return new Vector2(Math.sin(angle), Math.cos(angle))
   }

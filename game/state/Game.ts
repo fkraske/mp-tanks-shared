@@ -4,15 +4,36 @@ import type { Morphable } from '../../framework/morphable/Morphable'
 import { ActiveState } from '../communication/model/ActiveState'
 import { MoveDirectionState } from '../communication/model/MoveDirectionState'
 import { TurnDirectionState } from '../communication/model/TurnDirectionState'
+import { Bullet } from './Bullet'
+import { MoveInputMap } from './MoveInputMap'
 import { Collision, NonCollision } from './physics'
 import { Player } from './Player'
+import { PlayerInputState } from './PlayerInputState'
+import { TurnInputMap } from './TurnInputMap'
 
 export class Game implements Morphable<Game> {
   public constructor(
     public readonly state = GameState.Starting,
-    public readonly player1 = new Player(new Vector2(-0.5, 0), Math.PI),
-    public readonly player2 = new Player(new Vector2(0.5, 0), -Math.PI)
+    public readonly player1 = new Player(new Vector2(-0.5, 0), Math.PI / 2),
+    public readonly player2 = new Player(new Vector2(0.5, 0), -Math.PI / 2)
   ) { }
+
+  //TODO remove
+  public static makeNonNull() {
+    return new Game(
+      GameState.Starting,
+      new Player(Vector2.Zero, 0, new PlayerInputState(), new Bullet(Vector2.Zero, Vector2.Zero), Player.MaxLives),
+      new Player(Vector2.Zero, 0, new PlayerInputState(), new Bullet(Vector2.Zero, Vector2.Zero), Player.MaxLives)
+    )
+  }
+
+  public static cloneDeserialized(game: Game) {
+    return new Game(
+      game.state,
+      Player.cloneDeserialized(game.player1),
+      Player.cloneDeserialized(game.player2)
+    )
+  }
 
   public interpolate(that: Game, t: number) {
     return new Game(

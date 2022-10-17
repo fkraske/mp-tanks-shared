@@ -7,16 +7,18 @@ import { MoveDirectionState } from '../communication/model/MoveDirectionState'
 import { TurnDirectionState } from '../communication/model/TurnDirectionState'
 import { LEVEL_EXTENTS } from '../constants'
 import { Bullet } from './Bullet'
+import { MoveInputMap } from './MoveInputMap'
 import type { PhysicsObject } from './physics'
 import { PlayerInputState } from './PlayerInputState'
+import { TurnInputMap } from './TurnInputMap'
 
 export class Player implements Morphable<Player>, PhysicsObject {
-  public static readonly Radius = 0.05
-  public static readonly MoveSpeed = 0.32
+  public static readonly Radius = 0.1
+  public static readonly MoveSpeed = 0.45
   public static readonly TurnSpeed = Math.PI / 2
-  public static readonly BulletSpeed = 0.56
+  public static readonly BulletSpeed = 0.7
   public static readonly MaxLives = 3
-  public static readonly CannonLength = 0.07
+  public static readonly CannonLength = 0.14
 
   public constructor(
     public readonly position: Vector2,
@@ -26,16 +28,43 @@ export class Player implements Morphable<Player>, PhysicsObject {
     public readonly lives: number = Player.MaxLives
   ) { }
 
+  public static cloneDeserialized(player: Player) {
+    return new Player(
+      Vector2.cloneDeserialized(player.position),
+      player.angle,
+      new PlayerInputState(
+        new MoveInputMap(
+          player.input.movement.up,
+          player.input.movement.right,
+          player.input.movement.down,
+          player.input.movement.left
+        ),
+        new TurnInputMap(
+          player.input.turn.clockwise,
+          player.input.turn.counterClockwise
+        ),
+        player.input.shoot
+      ),
+      player.bullet == null
+        ? undefined
+        : new Bullet(
+          Vector2.cloneDeserialized(player.bullet.position),
+          Vector2.cloneDeserialized(player.bullet.velocity)
+        ),
+      player.lives
+    )
+  }
+
   public get forward() {
     return Vector2.fromAngle(this.angle)
   }
-  
+
   public get velocity() {
     return this.input.getMoveVector().mul(Player.MoveSpeed)
   }
-  
+
   public get radius() { return Player.Radius }
-  
+
   public interpolate(that: Player, t: number) {
     return new Player(
       this.position.interpolate(that.position, t),
@@ -82,7 +111,7 @@ export class Player implements Morphable<Player>, PhysicsObject {
     const d = point.abs.subV(LEVEL_EXTENTS).abs
     return d.x < d.y ? this.stopMoveX() : this.stopMoveY()
   }
-  
+
   public addTurnInput(directionState: TurnDirectionState) {
     return new Player(
       this.position,
@@ -100,9 +129,9 @@ export class Player implements Morphable<Player>, PhysicsObject {
       this.input.addShootInput(activeState),
       this.input.shoot === ActiveState.Inactive && activeState === ActiveState.Active && !this.bullet
         ? new Bullet(
-            this.position.addV(this.forward.mul(Player.CannonLength)),
-            this.forward.mul(Player.BulletSpeed)
-          )
+          this.position.addV(this.forward.mul(Player.CannonLength)),
+          this.forward.mul(Player.BulletSpeed)
+        )
         : this.bullet,
       this.lives
     )
