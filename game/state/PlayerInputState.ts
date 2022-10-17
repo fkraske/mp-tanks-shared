@@ -9,7 +9,8 @@ import { TurnInputMap } from './TurnInputMap';
 export class PlayerInputState {
   public constructor(
     public readonly movement: MoveInputMap = new MoveInputMap(),
-    public readonly turn: TurnInputMap = new TurnInputMap()
+    public readonly turn: TurnInputMap = new TurnInputMap(),
+    public readonly shoot: ActiveState = ActiveState.Inactive
   ) { }
 
   public getMoveState(direction: MoveDirection) {
@@ -29,14 +30,24 @@ export class PlayerInputState {
   public addMoveInput(directionState: MoveDirectionState) {
     return new PlayerInputState(
       this.movement.with(directionState.direction, directionState.activeState),
-      this.turn
+      this.turn,
+      this.shoot
     )
   }
 
   public addTurnInput(directionState: TurnDirectionState) {
     return new PlayerInputState(
       this.movement,
-      this.turn.with(directionState.direction, directionState.activeState)
+      this.turn.with(directionState.direction, directionState.activeState),
+      this.shoot
+    )
+  }
+
+  public addShootInput(activeState: ActiveState) {
+    return new PlayerInputState(
+      this.movement,
+      this.turn,
+      activeState
     )
   }
 }

@@ -14,6 +14,7 @@ export class Player implements Morphable<Player>, PhysicsObject {
   public static readonly Radius = 0.05
   public static readonly MoveSpeed = 0.32
   public static readonly TurnSpeed = Math.PI / 2
+  public static readonly BulletSpeed = 0.56
   public static readonly MaxLives = 3
   public static readonly CannonLength = 0.07
 
@@ -25,6 +26,10 @@ export class Player implements Morphable<Player>, PhysicsObject {
     public readonly lives: number = Player.MaxLives
   ) { }
 
+  public get forward() {
+    return Vector2.fromAngle(this.angle)
+  }
+  
   public get velocity() {
     return this.input.getMoveVector().mul(Player.MoveSpeed)
   }
@@ -84,6 +89,21 @@ export class Player implements Morphable<Player>, PhysicsObject {
       this.angle,
       this.input.addTurnInput(directionState),
       this.bullet,
+      this.lives
+    )
+  }
+
+  public addShootInput(activeState: ActiveState) {
+    return new Player(
+      this.position,
+      this.angle,
+      this.input.addShootInput(activeState),
+      this.input.shoot === ActiveState.Inactive && activeState === ActiveState.Active && !this.bullet
+        ? new Bullet(
+            this.position.addV(this.forward.mul(Player.CannonLength)),
+            this.position.addV(this.forward.mul(Player.BulletSpeed))
+          )
+        : this.bullet,
       this.lives
     )
   }

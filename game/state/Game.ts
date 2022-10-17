@@ -1,6 +1,7 @@
 import { ID } from '../../framework/id/ID'
 import { Vector2 } from '../../framework/math/Vector2'
 import type { Morphable } from '../../framework/morphable/Morphable'
+import { ActiveState } from '../communication/model/ActiveState'
 import { MoveDirectionState } from '../communication/model/MoveDirectionState'
 import { TurnDirectionState } from '../communication/model/TurnDirectionState'
 import { Collision, NonCollision } from './physics'
@@ -82,6 +83,14 @@ export class Game implements Morphable<Game> {
       this.state,
       playerID === 0 ? this.player1.addTurnInput(directionState) : this.player1,
       playerID === 1 ? this.player2.addTurnInput(directionState) : this.player2,
+    )
+  }
+
+  public addPlayerShootInput(playerID: ID, activeState: ActiveState) {
+    return new Game(
+      this.state,
+      playerID === 0 ? this.player1.addShootInput(activeState) : this.player1,
+      playerID === 1 ? this.player2.addShootInput(activeState) : this.player2
     )
   }
 

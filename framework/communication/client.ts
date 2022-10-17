@@ -6,6 +6,6 @@ import type { Morphable } from '../morphable/Morphable'
 export abstract class ClientEvent<T, E extends Morphable<E>> {
   public constructor(public readonly name: string) { }
 
-  public abstract checkType(eventPayload: any): eventPayload is T
+  public abstract checkType(payload: any): payload is T
   public abstract getTimeStampedLeap(connectionID: ID, eventPayload: T): TimeStamped<Leap<E>>
 }

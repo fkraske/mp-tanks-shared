@@ -46,6 +46,20 @@ class ClientTurnEvent extends ClientGameEvent {
   }
 }
 
+class ClientShootEvent extends ClientGameEvent {
+  public constructor(
+    name: string,
+    public readonly shootActiveState: ActiveState
+  ) { super(name) }
+
+  public override getTimeStampedLeap(connectionID: number, payload: { inputTime: number }): TimeStamped<Leap<Game>> {
+    return new TimeStamped(
+      payload.inputTime,
+      g => { return g.addPlayerShootInput(connectionID, this.shootActiveState) }
+    )
+  }
+}
+
 
 
 export const MoveUpStart = new ClientMoveEvent(
@@ -98,6 +112,16 @@ export const TurnCounterClockwiseEnd = new ClientTurnEvent(
   new TurnDirectionState(TurnDirection.CounterClockwise, ActiveState.Inactive)
 )
 
+export const ShootStart = new ClientShootEvent(
+  'shoot-start',
+  ActiveState.Active
+)
+
+export const ShootEnd = new ClientShootEvent(
+  'shoot-end',
+  ActiveState.Inactive
+)
+
 export const All = [
   MoveUpStart,
   MoveRightStart,
@@ -111,5 +135,8 @@ export const All = [
   TurnClockwiseStart,
   TurnCounterClockwiseStart,
   TurnClockwiseEnd,
-  TurnCounterClockwiseEnd
+  TurnCounterClockwiseEnd,
+
+  ShootStart,
+  ShootEnd
 ]
