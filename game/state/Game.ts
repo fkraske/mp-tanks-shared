@@ -1,6 +1,7 @@
 import { ID } from '../../framework/id/ID'
 import { Vector2 } from '../../framework/math/Vector2'
 import type { Morphable } from '../../framework/morphable/Morphable'
+import { Utils } from '../../framework/util/numberUtils'
 import { ActiveState } from '../communication/model/ActiveState'
 import { MoveDirectionState } from '../communication/model/MoveDirectionState'
 import { TurnDirectionState } from '../communication/model/TurnDirectionState'
@@ -8,6 +9,8 @@ import { Collision, NonCollision } from './physics'
 import { Player } from './Player'
 
 export class Game implements Morphable<Game> {
+  public static readonly FinishDuration = 5
+  
   public constructor(
     public readonly state = GameState.Playing,
     public readonly player1 = new Player(new Vector2(-0.5, 0), Math.PI / 2),
@@ -16,7 +19,9 @@ export class Game implements Morphable<Game> {
 
   public static cloneDeserialized(game: Game) {
     return new Game(
-      game.state,
+      (game.state as any).waitRemaining === undefined
+        ? GameState.Playing
+        : new GameState.Finished((game.state as any).waitRemaining),
       Player.cloneDeserialized(game.player1),
       Player.cloneDeserialized(game.player2)
     )
@@ -24,7 +29,7 @@ export class Game implements Morphable<Game> {
 
   public interpolate(that: Game, t: number) {
     return new Game(
-      t > 0 ? that.state : this.state,
+      this.state.interpolate(that, t),
       this.player1.interpolate(that.player1, t),
       this.player2.interpolate(that.player2, t)
     )
@@ -35,11 +40,17 @@ export class Game implements Morphable<Game> {
     const interruption = this.findNextInterruption()
     t = Math.min(t, interruption.t)
 
-    let result = new Game(
-      this.state,
-      this.player1.advance(t),
-      this.player2.advance(t)
-    )
+    let result = this.state === GameState.Playing
+      ? new Game(
+          this.state,
+          this.player1.advance(t),
+          this.player2.advance(t)
+        )
+      : new Game(
+        this.state.advance(t),
+        this.player1,
+        this.player2
+      )
 
     if (interruption.t <= tRemaining)
       result = interruption.handle(result)
@@ -48,34 +59,36 @@ export class Game implements Morphable<Game> {
   }
 
   private findNextInterruption() {
-    return Interruption.reduce(
-      new PlayerLevelCollision(Collision.findObjectLevel(this.player1), 0),
-      new PlayerLevelCollision(Collision.findObjectLevel(this.player2), 1),
-      new BulletLevelCollision(
-        this.player1.bullet == null
-          ? NonCollision
-          : Collision.findObjectLevel(this.player1.bullet!),
-        0
-      ),
-      new BulletLevelCollision(
-        this.player2.bullet == null
-          ? NonCollision
-          : Collision.findObjectLevel(this.player2.bullet!),
-        1
-      ),
-      new PlayerBulletCollision(
-        this.player2.bullet == null
-          ? NonCollision
-          : Collision.findObjectObject(this.player1, this.player2.bullet!),
-        0
-      ),
-      new PlayerBulletCollision(
-        this.player1.bullet == null
-          ? NonCollision
-          : Collision.findObjectObject(this.player2, this.player1.bullet!),
-        1
-      )
-    )
+    return this.state !== GameState.Playing
+      ? new GameRestart((this.state as any).waitRemaining)
+      : Interruption.reduce(
+          new PlayerLevelCollision(Collision.findObjectLevel(this.player1), 0),
+          new PlayerLevelCollision(Collision.findObjectLevel(this.player2), 1),
+          new BulletLevelCollision(
+            this.player1.bullet == null
+              ? NonCollision
+              : Collision.findObjectLevel(this.player1.bullet!),
+            0
+          ),
+          new BulletLevelCollision(
+            this.player2.bullet == null
+              ? NonCollision
+              : Collision.findObjectLevel(this.player2.bullet!),
+            1
+          ),
+          new PlayerBulletCollision(
+            this.player2.bullet == null
+              ? NonCollision
+              : Collision.findObjectObject(this.player1, this.player2.bullet!),
+            0
+          ),
+          new PlayerBulletCollision(
+            this.player1.bullet == null
+              ? NonCollision
+              : Collision.findObjectObject(this.player2, this.player1.bullet!),
+            1
+          )
+        )
   }
 
   public addPlayerMoveInput(playerID: ID, directionState: MoveDirectionState) {
@@ -119,10 +132,10 @@ abstract class Interruption {
   }
 
   public handle(game: Game) {
-    return this.t == Infinity ? game : this.handleImpl(game)
+    return this.t == Infinity ? game : this.handleInternal(game)
   }
 
-  protected abstract handleImpl(game: Game): Game
+  protected abstract handleInternal(game: Game): Game
 }
 
 class PlayerLevelCollision extends Interruption {
@@ -133,7 +146,7 @@ class PlayerLevelCollision extends Interruption {
 
   public override get t() { return this.collision.t }
 
-  protected handleImpl(game: Game) {
+  protected handleInternal(game: Game) {
     return new Game(
       game.state,
       this.playerID == 0 ? game.player1.handleLevelCollision(this.collision.point!) : game.player1,
@@ -150,7 +163,7 @@ class BulletLevelCollision extends Interruption {
 
   public override get t() { return this.collision.t }
 
-  protected handleImpl(game: Game) {
+  protected handleInternal(game: Game) {
     return new Game(
       game.state,
       this.playerID == 0 ? game.player1.destroyBullet() : game.player1,
@@ -167,15 +180,62 @@ class PlayerBulletCollision extends Interruption {
 
   public override get t() { return this.collision.t }
 
-  protected handleImpl(game: Game) {
+  protected handleInternal(game: Game) {
     game = new Game(
       game.state,
       this.playerID == 0 ? game.player1.getHurt() : game.player1.destroyBullet(),
       this.playerID == 1 ? game.player2.getHurt() : game.player2.destroyBullet()
     )
     
-    return game.player1.lives == 0 || game.player2.lives == 0 ? game.switchState(GameState.Finished) : game
+    return game.player1.lives == 0 || game.player2.lives == 0
+      ? game.switchState(new GameState.Finished(Game.FinishDuration))
+      : game
   }
 }
 
-export enum GameState { Playing, Finished }
+class GameRestart extends Interruption {
+  public constructor(public readonly t: number) { super() }
+
+  protected handleInternal(game: Game): Game {
+    return new Game()
+  }
+}
+
+export abstract class GameState implements Morphable<GameState> {
+  private constructor() { }
+  public abstract interpolate(that: GameState, t: number): GameState
+  public abstract advance(t: number): GameState
+  
+  public static Playing = new class extends GameState {
+    public constructor() { super() }
+
+    public interpolate(that: GameState, t: number): GameState {
+      return t > 0 ? that : this
+    }
+
+    public advance(t: number): GameState {
+      return this
+    }
+  }()
+  public static Finished = class extends GameState {
+    public constructor(public readonly waitRemaining: number) { super() }
+
+    public interpolate(that: GameState, t: number): GameState {
+      return that === GameState.Playing
+        ? t > 0
+          ? that
+          : this
+        : new GameState.Finished(
+            Utils.interpolate(
+              this.waitRemaining,
+              (that as any).waitRemaining,
+              t
+            )
+          )
+    }
+
+    public advance(t: number): GameState {
+      return new GameState.Finished(this.waitRemaining - t)
+    }
+  }
+}
